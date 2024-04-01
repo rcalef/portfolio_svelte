@@ -1,0 +1,120 @@
+html {
+	--color-accent: oklch(65% 50% 0);
+	color-scheme: light dark;
+}
+
+body {
+    /* Set line height to 1.5 times the font size
+       and use the OS’s UI font as the website font
+     */
+    font: 100%/1.5 system-ui;
+	max-width: 100ch;
+	margin-inline: auto;
+	padding: 5%;
+}
+
+label, input, textarea {
+	/* Make these elements behave like block elements,
+	   i.e. occupy the whole available width and create line breaks before and after
+	 */
+	display: block;
+}
+
+label {
+	/* Add some space before each label that grows as the font size grows */
+	margin-top: 1em;
+}
+
+.color-scheme {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	font-family: inherit;
+	font-size: 80%;
+}
+
+input, textarea {
+	/* Because form fields are special,
+	   they also need `width: 100%`
+	   to actually fill the whole available width.
+	 */
+	width: 100%;
+
+	/* Special sizing mode that makes the element’s width
+	   include internal spacing (padding) and borders
+	 */
+	box-sizing: border-box;
+
+	/* Use the same font and font metrics as the rest of the page */
+	font: inherit;
+}
+
+img {
+	max-width: 100%;
+}
+
+h1 {
+	font: 300% system-ui;
+}
+h1, h2, h3, h4 {
+	line-height: 1.1;
+	text-wrap: balance;
+}
+
+nav {
+	--border-color: oklch(50% 10% 200 / 40%);
+	display: flex;
+	margin-bottom: 1cm;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: var(--border-color);
+
+	a {
+		flex: 1;
+		text-decoration: none;
+		color: inherit;
+		text-align: center;
+		padding: 0.5em;
+		&:hover { /* becomes a:hover */
+			text-decoration: underline;
+			accent-color: var(--color-accent);
+			border-bottom-width: 0.4em;
+			border-bottom-style: solid;
+			border-bottom-color: var(--color-accent);
+			background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
+		}
+	}
+}
+
+.projects {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+
+	.clickable-article {
+		text-decoration: none;
+		color: inherit;
+
+
+		article {
+			display: grid;
+			grid-template-rows: subgrid;
+			grid-row: span 3;
+			max-width: 95%;
+
+			img {
+				max-width: 95%;
+			}
+		}
+
+	}
+	h2 {
+		margin: 0;
+	}
+
+}
+
+.current {
+	border-bottom-width: 0.4em;
+	border-bottom-style: solid;
+	border-bottom-color: oklch(80% 3% 200);
+}
