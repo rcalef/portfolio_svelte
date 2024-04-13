@@ -30,31 +30,3 @@ if ("colorScheme" in localStorage) {
 	setColorScheme(curr_scheme);
 	select.value = curr_scheme;
 }
-
-
-let pages = [
-	{url: ".", title: "Home"},
-	{url: "./projects", title: "Projects"},
-	{url: "./contact", title: "Contact"},
-];
-
-let nav = document.createElement("nav");
-document.body.prepend(nav);
-
-for (let p of pages) {
-	let url = p.url;
-	let a = document.createElement("a")
-
-	a.href = url;
-	a.textContent = p.title;
-
-	if (a.host === location.host && a.pathname === location.pathname) {
-		a.classList.add("current");
-	}
-
-	if (a.host !== location.host) {
-		a.target = "_blank";
-	}
-
-	nav.append(a);
-}

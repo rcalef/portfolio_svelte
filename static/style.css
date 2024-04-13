@@ -61,60 +61,7 @@ h1, h2, h3, h4 {
 	text-wrap: balance;
 }
 
-nav {
-	--border-color: oklch(50% 10% 200 / 40%);
-	display: flex;
-	margin-bottom: 1cm;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: var(--border-color);
-
-	a {
-		flex: 1;
-		text-decoration: none;
-		color: inherit;
-		text-align: center;
-		padding: 0.5em;
-		&:hover { /* becomes a:hover */
-			text-decoration: underline;
-			accent-color: var(--color-accent);
-			border-bottom-width: 0.4em;
-			border-bottom-style: solid;
-			border-bottom-color: var(--color-accent);
-			background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
-		}
-	}
-}
-
 .projects {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-
-	.clickable-article {
-		text-decoration: none;
-		color: inherit;
-
-
-		article {
-			display: grid;
-			grid-template-rows: subgrid;
-			grid-row: span 3;
-			max-width: 95%;
-
-			img {
-				max-width: 95%;
-			}
-		}
-
-	}
-	h2 {
-		margin: 0;
-	}
-
-}
-
-.current {
-	border-bottom-width: 0.4em;
-	border-bottom-style: solid;
-	border-bottom-color: oklch(80% 3% 200);
 }
