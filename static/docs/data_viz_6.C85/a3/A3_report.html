@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Vis & Society Assignment 3</title>
+	<link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+	<header>
+		<h1>
+			<small>Assignment 3</small>
+			Visualization Design
+		</h1>
+
+		<p>
+			<strong>Robert Calef</strong> — <em>rcalef[at]mit[dot]edu</em>
+		</p>
+	</header>
+
+	<main>
+		<section>
+			<h2>Phase One: Sketching Visualizations</h2>
+			<p>
+				In this section, we'll sketch some prototype visualizations that attempt to answer the question:
+				<b>how has the relative proportion of ages changed since 1900?</b>
+			</p>
+
+      <figure>
+				<img src="images/sketch1.jpeg" alt="Hand-drawn sketch of a faceted histogram of population by age in 1900 vs 2000." />
+				<figcaption>
+					Sketch of faceted (small multiples) histogram of number of people per age bucket, faceted by year.
+					Top panel shows the data for 1900 and bottom panel shows the year 2000. Horizontal and vertical axes
+					use the same scales on both facets.
+				</figcaption>
+			</figure>
+			<p>
+				In case my handwriting is illegible, the title is "How has the relative proportion of ages changed since 1900?",
+				the vertical axis reads "# of people", and the horizontal axis reads "Age bucket".
+			</p>
+			<p>
+				Design Rationale for Sketch 1:
+			</p>
+
+			<ul>
+				<li>
+					When trying to get a sense of the overall distribution of binned data like this, I typically start with a histogram,
+					so I was thinking that being able to see the histograms for both years in the same view would give a good overview
+					of the two distributions and allow the viewer to compare.
+				</li>
+				<li>
+					Shared axis for age bins allow for (somewhat) easy visual comparison between the two years.
+				</li>
+				<li>
+					I don't like that the visual separation of data (i.e. white space between bottom of 1900 facet and top of 2000 bars)
+					means you have to look back and forth between the two histograms to draw any conclusions.
+				</li>
+				<li>
+					Presenting all the data in a relatively raw form allows the viewer to perform any comparison they're interested in,
+					given enough time, but there isn't really an immediate takeaway that jumps out at you here.
+				</li>
+				<li>
+					Using same scale for vertical axes communicates the growth in total population, but also makes it more difficult to
+					compare relative proportions.
+				</li>
+				<li>
+					Overall it seems like small multiples is nice for showing both data sets individually for an initial exploration,
+					but it's hard to make quick comparisons.
+				</li>
+				<li>
+					For my next sketch, I'd like to see if I can come up with something where both datasets are in the same facet and
+					also allows comparing relative proportions more easily.
+				</li>
+			</ul>
+
+      <figure>
+				<img src="images/sketch2.jpeg" alt="Hand-drawn sketch of cumulative distribution of ages in 1900 vs 2000." />
+				<figcaption>
+					Step plot showing the cumulative distribution of age. The years 1900 and 2000 are shown as a plain line and a hatched
+					line respectively, although in a real version of this plot, the hatched line would just be a different color.
+				</figcaption>
+			</figure>
+			<p>
+				Again, in case my handwriting is illegible, the title is "How have the distributions of ages changed since 1900?",
+				the vertical axis reads "Cumulative percentage of population" with "w/ age less than X" crossed out, the
+				horizontal axis reads "Age bucket", the legend reads "Year" with an arrow pointing to "Hatches are a stand-in for different
+				color".
+			</p>
+
+			<p>
+				Design Rationale for Sketch 2:
+			</p>
+
+			<ul>
+				<li>
+					Looking at cumulative distribution functions (CDFs) can be a quick way to answer questions like "what percentage of
+					the population is above/below age X?" (e.g what percentage is over 75 years old, or under 20 years old?).
+				</li>
+				<li>
+					By putting both CDFs on the same plot, we can be visually drawn to points where the distributions begin to signficantly
+					differ, as these are often points where the lines cross. For example, if the percentage of children is lower in 1900,
+					we'll see this as the 1900 line starting below the 2000 line, and then eventually crossing as we reach adult ages.
+				</li>
+				<li>
+					A downside of this type of plot is that CDFs are typically not immediately intuitive, and typically require viewers to
+					understand (or remind themselves of) a CDF before they can actually start parsing out interesting comparisons of the
+					distributions.
+				</li>
+				<li>
+					Another downside is that there's not an obvious way to incorporate the sex information into this plot without making
+					separate lines for each sex/year combination, which would result in four CDFs and a very crowded visualization.
+				</li>
+				<li>
+					While one can more quickly compare the two distributions and read off interesting summary statistics, there still isn't
+					really an immediately digestible takeaway here.
+				</li>
+				<li>
+					For my next sketch, I'd like to combine the intuitive nature of the histogram with the ability to read off interesting
+					quantiles from the CDF. It would also be nice to incorporte the reported sex information.
+				</li>
+			</ul>
+
+      <figure>
+				<img src="images/sketch3.jpeg" alt="Hand-drawn sketch of stacked bar plots of number of people of a given age in 1900 vs 2000, emanating from common vertical axis" />
+				<figcaption>
+					Stacked bar plot of number of people in a given age bucket, with male and female split out (note that male vs female are
+					shown as plain vs dotted bars here, but would be shown with colors in the final version). Bars emanate from a common vertical
+					axis, with population counts for 1900 shown on the left (higher numbers go to left) and 2000 shown on the right (higher numbers
+					go to the right). I've also annotated quantiles of the age distributions with dashed lines and arrows pointing to the
+					average life expectancy in both years.
+				</figcaption>
+			</figure>
+			<p>
+				One final time, in case my handwriting is illegible, the title is "How has the distributions of ages changed since 1900?",
+				the vertical axis reads "Age bucket" and the horizontal axis reads "# of people". The legend shows an empty box for "Male"
+				and a dotted box for "Female". Horizontal dashed lines indicate quartiles and read "25%", "50%", and "75%". At the top
+				of the plot canvas reads "Avg life expectancy" with arrows pointing to made-up values.
+			</p>
+			<p>
+				Design Rationale for Sketch 3:
+			</p>
+
+			<ul>
+				<li>
+					Showing bar plots like the first sketch is a more intuitive mark that a viewer can immediately parse as a longer bar
+					meaning a bigger number.
+				</li>
+				<li>
+					Having bar plots emanate from a common base reduces the distance that the eye has to travel to compare the two
+					distributions.
+				</li>
+				<li>
+					Using a vertical common axis instead of a horizontal common axis helps prevent viewers from wondering if something
+					is going on with negative numbers.
+				</li>
+				<li>
+					Using stacked bar charts makes it relatively easy to look at the sex proportion within an age bucket. Since it seems like
+					most buckets are a 50/50 split between male and female, the main interesting takeaway is the enrichment for women at
+					older ages, which is a coarse enough takeaway to be communicated in a stacked bar chart.
+				</li>
+				<li>
+					Adding in dashed lines for quantiles does make the chart a bit more busy, but gives some reference points for summary
+					statistics of the distributions. Comparing the vertical position of lines also gives a quick comparison.
+					<ul>
+						<li>
+							In a final version, it would be good to figure out a way to visually distinguish the 3 quartile lines (e.g.
+							different color or stroke for 25%, 50%, 75%) to allow quick comparison of the same quartiles across the
+							two distributions.
+						</li>
+					</ul>
+				</li>
+				<li>
+					Average life expectancy is a quantity that most people have an intuitive grasp of, so showing it here can be a quick
+					way to emphasize many more older people in 2000 compared to 1900 and provides a quickly digestible takeaway message.
+				</li>
+			</ul>
+
+      <h3>Reflection</h3>
+
+      <p>
+    	I think my sketches show a bit of an evolution of trying to pack more and more information into each plot, likely at the expense
+		of a viewer being able to immediately grasp what's being shown. The first sketch is a bit too basic in the sense that it doesn't
+		really show much beyond the raw data and a rough "feel" for the data. It's more of the type of exploratory plot one might generate
+		upon first receiving a dataset. The second sketch of the CDFs provides a reflective visualization that can allow one to calculate
+		off interesting quantities, but I think it's a bit overly technical so may be a bit confusing at first glance. The third sketch
+		landed on a nice way to both portray the raw data in a way that facilitates visual comparison, while also preserving some interesting
+		summary statistics. My only worry with the third sketch is that it's a bit crowded with all the annotations. For my final version,
+		I'll likely carry forward the design from sketch 3, but try to think of ways to reduce the amount of visual clutter and also
+		more clearly emphasize a takeaway message of an older US population in 2000 compared to 1900.
+      </p>
+
+		</section>
+
+		<section>
+			<h2>Phase Two: Final Design</h2>
+			<figure>
+				<img src="images/plot_final.svg" alt="Horizontal stacked bar plots of number of people in 5 year age buckets in 1900 vs 2000." />
+				<figcaption>
+				Comparison of age demographics in the United States in the years 1900 and 2000. Age distributions are shown as horizontal bar charts
+				with population of females and males split out as separate stacked bars. Bars emanate from a common vertical axis: right facet shows
+				the year 1900 and left facet shows the year 2000. Additional horizontal lines and annotations show median age and life expectancy in
+				both years.
+				<p style="font-size: small;font-weight:200">
+				*: While sex is not a binary, US Census data has only collected binary sex data, although
+				<a href="https://apnews.com/article/sex-gender-census-lgbtq-survey-3ba295e792c1723cae8514d67afea88a">this may change in the future</a><br>
+				^: https://www.health.harvard.edu/blog/why-life-expectancy-in-the-us-is-falling-202210202835<br>
+				+: https://www.cdc.gov/nchs/data/nvsr/nvsr51/nvsr51_03.pdf
+				</p>
+				</figcaption>
+			</figure>
+		</section>
+
+		<section>
+			<h2>Design Process & Design Decisions</h2>
+			<p>
+				Before looking at the dataset in depth, my initial goal was to provide a high-level sense of how age demographics have shifted in the
+				100 years between 1900 and 2000. After looking at the dataset some more (i.e. after the sketching), I thought that an interesting takeaway
+				is how much older the population is overall. However, I felt like the dataset is fairly rich for inspection and reflection, so I
+				also wanted to provide a full enough view of the data that a viewer could inspect and reflect on their own to ask any questions they might
+				have.
+			</p>
+			<p>
+				After the sketching exercise, I felt that the third sketch provided the best balance of having a quickly parseable takeaway while also
+				providing the rich representation that could allow a viewer to ask their own follow-up questions. Because I still felt that the sketch was
+				a bit visually crowded, I shifted away from the quartile lines and instead decided to just show median age and life expectancy as two
+				immediate takeaways and concrete points of comparison between the two age distributions. I also felt that it would be nice to have a
+				concrete point of reference for just how different the US looked in 1900 vs 2000, hence the small photos of Times Square (a well-known
+				landmark) at both timepoints.
+			</p>
+			<p>
+				An enumeration of other design decisions and their rationale are as follows:
+				<ul>
+					<li>
+						I selected a bar chart for the core visualization, as length from a common baseline is one of the most effective encodings for
+						comparing quantities.
+					</li>
+					<li>
+						I further made the plot into a stacked bar chart because this allows for quick evaluation of the approximate proportions of
+						female vs male in a given age bucket, and the main takeaway of enrichment for women at older ages is strong enough to come
+						through in this coarse representation of proportions.
+					</li>
+					<li>
+						As discussed above, having bars emanate from a common axis more quickly facilitates comparison between the two distributions
+						without having to move your eyes back and forth across a lot of whitespace each time.
+					</li>
+					<li>
+						I selected a common horizontal scale both for practical reasons (it would be confusing to have two different scales on the
+						same axis) and also to indirectly show population growth between the two timepoints, although I did not choose to explicitly
+						show the total population count, as the number of annotations was already getting a bit crowded.
+					</li>
+					<li>
+						I added slight spacing between bars to visually distinguish the different age buckets and make it easier to count off the intermediate
+						buckets without cluttering the vertical axis with a label for each bin.
+					</li>
+					<li>
+						I added vertical grid lines since the plot is very tall, so it's easy to lose track of the scale as you look up. In contrast, I
+						removed horizontal grid lines to reduce visual clutter, as the plot is fairly narrow and the discrete nature of bins makes it
+						a bit easier to count off what age bucket you're looking at.
+					</li>
+					<li>
+						I reduced the alpha on the bars to make them fade a bit so as to emphasize the annotations for a quick takeaway message.
+					</li>
+					<li>
+						While the standard blue/pink for male/female can be more immediately understandable by some, I felt the extra few seconds
+						of checking a legend is worth it for the gain of not perpetuating the "shrink it and pink it" stereotype of assigning pink
+						to women.
+					</li>
+					<li>
+						I moved the vertical axis labels to the right side both to allow the viewer to first focus on the annotations and also to
+						make the axis labels closer to actual data due to the large amount of whitespace on the left side of the visualization.
+					</li>
+				</ul>
+				Overall I think my design decisions served my goal of giving an immediate takeaway that the US population in 2000 is generally older than
+				the US population in 1900, while also allowing an interested viewer to ask their own questions and parse other interesting aspects of the
+				data (e.g. enrichment of women at older ages, larger overall population in 2000, and the growing proportion of middle-aged people in 2000).
+				I do think that my choice of a stacked bar chart focusing on ages makes it hard to read off finer-grained information about female-male
+				proportions, both within and across the two timepoints.
+			</p>
+      		<h3>Reflection</h3>
+			<p>
+				The sketching process was definitely helpful in terms of rapidly iterating on different ideas for visualization without having to go through
+				the nitty-gritty of getting your favorite visualization tool to actually make the plot you're imagining in your head (e.g. it likely would've
+				taken awhile to get the CDF plot to come out correctly). The sketching phase helped me try out ways of progressively integrating more information
+				into the visualization while also realizing that a faceted histogram was a bit too "raw", a CDF was fairly unapproachable, and that the first
+				iteration of the horizontal stacked bar chart was too visually crowded. I think in the future, I'd like to continue with the sketching process,
+				and try to explore a bit more "wild" types of visualizations during it, as my sketches here seemed like a bit of a linear path of increasing
+				complexity, rather than a breadth-first exploration of many distinct types of ideas (although this may have also been driven by having the same
+				underlying question for all the sketches).
+			</p>
+		</section>
+	</main>
+</body>
+</html>

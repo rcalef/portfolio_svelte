@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Vis & Society Assignment 3</title>
+	<link rel="stylesheet" href="https://vis-society.github.io/assignments/report.css" />
+</head>
+
+<body>
+	<header>
+		<h1>
+			<small>Assignment 4</small>
+			Persuasive or Deceptive Visualization?
+		</h1>
+
+		<p>
+			<strong>Robert Calef</strong> — <em>rcalef[at]mit[dot]edu</em>
+		</p>
+	</header>
+
+	<main>
+    <h2>Proposition: The NYPD's disciplinary system is sufficient for discouraging bad behavior by officers</h2>
+
+		<section>
+      <h3>FOR the Proposition</h3>
+
+      <figure>
+				<img src="images/support_final.svg" alt="" />
+				<figcaption>
+					While a non-negligible percentage of NYPD officers receive civilian complaints, we find that relatively few of them received repeated complaints and
+					often go on to lead succesful careers within the police force.
+				</figcaption>
+			</figure>
+
+			<p>
+				Design Decisions and Rationale:
+			</p>
+
+			<ul>
+				<li>
+					<p>
+						The dataset as given can contain multiple rows for a single "complaint event" (<code>compaint_id</code>). This is most often when
+						multiple civilians file a complaint for the same police encounter, but also when multiple officers are involved in the same encounter.
+						For the purposes of this visualization, I filtered down to unique complaints per officer, that is, counting events where multiple civilians
+						complain about the same officer as a single event. I did this to <b>make the total number of complaints per officer look smaller</b>, and thus
+						minimize the problem of officers receiving recurrent complaints. However, since this still retains cases where multiple officers are involved
+						in the same encounter, and thus doesn't entirely redact data, I don't think it's completely deceptive. What is deceptive here is not making
+						it clear in the visualization that I've performed this data filtering.
+					</p>
+					<p>
+						Score: -1
+					</p>
+				</li>
+				<li>
+					<p>
+						I had the same rationale for both including the pie chart and showing the histogram in terms of percentages rather than absolute numbers:
+						<b>make the number of officers receiving complaints feel smaller</b>. While the rationale is similar to above, the process and level of
+						deception is slightly different. In this case, we're contextualizing raw numbers by an (estimated) total police force size to provide
+						numbers that are perceived as smaller. For example, instead of saying "2000 officers received more than 3 complaints", we can say
+						"6% of officers received more than 3 complaints", which is perceived as a much smaller problem due to the fact that 2000 seems like a
+						large number without the context of the total police force size. A similar strategy could be used in the other direction in other contexts
+						(e.g. "80% of those surveyed prefer Wheaties" vs 4 out of 5 people surveyed prefer Wheaties"). The pie chart also serves
+						to explicitly communicate that a minority of officers are receiving complaints at any given time.
+					</p>
+					<p>
+						Since both the raw numbers and the percentages are true views of the data, I would consider this moderately earnest given that the total is
+						also listed.
+					</p>
+					<p>
+						Score: 1
+					</p>
+				</li>
+				<li>
+					<p>
+						I made the decision to split out the different outcomes of a civilian complaint both to <b>make the number of complaints lower</b> and also to
+						generally <b>create skepticism of complaints and paint the officers in a more positive light</b>. By showing that there are many complaints
+						that are categorized as "Unsubstantiated" or "Exonerated", it makes it appear as if the officers are frequently falsely accused of misbehavior.
+						What's omitted here is the explanation that "Unsubstantiated" and "Exonerated" outcomes can occur due to the NYPD providing incomplete
+						evidence to the Civilian Complaint Review Board (CCRB), which makes it clear that these aren't all just false accusations. I carry this
+						forward by only using "Substantiated" complaints when creating the bar chart of promotions and the pop-out table of examples, which also
+						inflates the "Years of service since last complaint" numbers for each officer, since many officers' most recent complaints are either
+						"Unsubstantiated" or "Exonerated".
+					</p>
+					<p>
+						While this is technically still raw data as it exists in the dataset, I think this is deceptive by omission of the full context of what
+						the different complaint outcomes actually represent, hence I rate this as moderately deceiptive.
+					</p>
+					<p>
+						Score: -1
+					</p>
+				</li>
+				<li>
+					<p>
+						Probably the most deceptive thing I did was calculating the number of promotions a given officer received between 2020 and the time of their
+						most recent "Substantiated" complaint. I did this by mapping the ranks in the dataset to numbers based on
+						<a href="https://en.wikipedia.org/wiki/New_York_City_Police_Department#Rank_structure">this page</a> of NYPD's rank structure. I say this is
+						deceptive because the number of promotions an individual received and the number of complaints they received are both highly correlated, since
+						both of these metrics increase with the officer's time of service in the NYPD (i.e. more time as a police officer -> more time to get
+						promoted and more time to engage in questionable behavior). In fact, you can see that in the "AGAINST" plot below, I show the same data but
+						in terms of number of complaints rather than years of service. I chose to present the data this way to <b>falsely create the impression that
+						an officer's behavior is changing after discipline</b>, when in fact all this is showing is that officers that work in the NYPD for a long time
+						tend to reach higher ranks.
+					</p>
+					<p>
+						I feel that this is very deceptive since it's painting correlation as causation without providing the full context a reader would need to
+						properly understand that the annotated conclusions are a strong leap of logic.
+					</p>
+					<p>
+						Score: -2
+					</p>
+				</li>
+				<li>
+					<p>
+						The last notable design decision I made was to include a pop-out table of examples from the bar chart of promotions. This table shows some
+						cherry-picked examples of officers who appear to have served in the force without complaint for many years while also rising to high ranks
+						within the force. The goal here was to <b>valorize these officers and create the impression of a succesful turnaround in career</b>. However,
+						these are very cherry-picked examples, as there are many examples of officers with long tenure since their last substantiated complaint who
+						have received few, if not zero, promotions, and conversely there are examples of officers who have received "Substantiated" complaints before
+						their leadership positions and then again after assuming that role.
+					</p>
+					<p>
+						While it's couched as "examples", I still feel that this is very deceptive since it's just blatantly cherry-picking data points to support a
+						conclusion, hence I'd rate this as very deceptive.
+					</p>
+					<p>
+						Score: -2
+					</p>
+				</li>
+				<p>
+					I also made smaller deceptive chocies such as emphasizing the long time span of the data (35 years) in the title, and attempting to make the visualization
+					appear objective through the use of a neutral title, clean design, citing/footnotes, and a brief overview of the dataset used (which also emphasizes the
+					large sample size in the dataset).
+				</p>
+			</ul>
+    </section>
+
+    <section>
+      <h3>AGAINST the Proposition</h3>
+
+      <figure>
+				<img src="images/against_final.svg" alt="" />
+				<figcaption>
+          While some officers only receive a small number of complaints, others seem to be a recurring source of civilian grievance, and may even reach leadership positions in the NYPD.
+				</figcaption>
+			</figure>
+
+			<p>
+				Design Decisions and Rationale:
+			</p>
+
+			<ul>
+				Note that many of these decisions are essentially the converse of the decisions made above.
+				<li>
+					<p>
+						As opposed to showing unique complaint events like the above plot, I instead use all rows in the dataset for counting number of complaints here.
+						What this means is that we're looking at "number of civilians filing complaints" rathen than "number of events generating complaints", and hence
+						this decision serves to <b>make the number of complaints look larger</b>. Again, this is defensible in that both are valid metrics to compute, but
+						the deception stems from not making it clear that this decision was made, for example in a footnote or in the axis label, so I would
+						rate this as moderately deceptive.
+					</p>
+					<p>
+						Score: -1
+					</p>
+				</li>
+				<li>
+					<p>
+						Instead of splitting out the complaints by their different outcomes like the previous plot, here I lumped them all together into a single category,
+						glossing over the distinction between "Substantiated", "Unsubstantiated", and "Exonerated". The rationale here was again to <b>make the number of
+						complaints look larger</b>. I feel that this is actually very deceptive, as it not only removes the distinction, but doesn't even bring it up as
+						a facet of the dataset that we've chosen not to represent. If a reader were to take these plots at face value without looking into the underlying
+						dataset, they would have no idea that there's any amount of ambiguity to whether officers were at fault or not.
+					</p>
+					<p>
+						Score: -2
+					</p>
+				</li>
+				<li>
+					<p>
+						Rather than showing number of officers as a percentage of the estimated total police force size, I instead chose to show raw numbers here. I made
+						this decision to <b>make the number of officers receiving complaints feel larger</b>. This is the flip side of what I described above, where we're
+						now utilizing the fact when we say something like "2000 officers received 3 or more complaints", this feels like a larger number than when one has
+						to take the extra step to go from 6% of 35,000 is roughly 2000. Combined with the two choices above to both count all rows in the dataset and not
+						split out the different types of complaints, we get a compounding effect which goes even further towards painting the picture that many officers
+						are receiving a large number of repeated complaints.
+					</p>
+					<p>
+						While I believe that it's deceptive to capitalize on this effect that raw numbers can "feel" larger than their corresponding percentages, it's also
+						true that the raw counts of officers are represented faithfully from the dataset, and the dataset doesn't actually communicate the total number
+						of officers employed by the NYPD at any given time. For both of these reasons, I feel that this is only moderately deceptive.
+					</p>
+					<p>
+						Score: -1
+					</p>
+				</li>
+				<li>
+					<p>
+						I made the decision to also show the average number of promotions again here, but this time showing it related to number of complaints, which is also
+						highly correlated with an individual's length of time as a police officer. By showing average number of promotions compared to number of complaints received,
+						we instead <b>make it appear that the NYPD is rewarding bad behavior</b>. I still think this is highly deceptive, as really all we're showing is that
+						the longer an officer works for the NYPD, the more likely they are to get promoted and the more likely they are to receive complaints. However, if one opposed
+						the proposition that the NYPD's disciplinary system is functioning well, then this would be a striking visualization, making it appear that the NYPD is
+						actually incentivizing bad behavior rather than discouraging it.
+					</p>
+					<p>
+						Since this is an actively misleading use of correlations in the dataset, I rate this as strongly deceptive.
+					</p>
+					<p>
+						Score: -2
+					</p>
+				</li>
+				<li>
+					<p>
+						Similar to the first plot, I again made the choice to cherry-pick examples for a table, showing officers who were the biggest outliers in terms of number
+						of promotions received and number of complaints received. In contrast to the first plot, instead of valorizing these officers, we're now <b>villainizing
+						these officers and creating the impression of bad actors reaching leadership positions</b>. Just like before, these are highly cherry-picked examples with
+						recent complaints, whereas we could just have easily found examples of individuals with few complaints who still reached leadership positions. Due to the
+						cherry-picking, I'd again rate this as strongly deceptive.
+					</p>
+					<p>
+						Score: -2
+					</p>
+				</li>
+			</ul>
+			<p>
+				Similar to the first plot, I also made smaller deceptive chocies such as deemphasizing the long time span of the data by pushing it into a footnote and instead emphasizing
+				the number of officers in the dataset in the title. I again attempted to make the visualization appear objective through the use of a neutral title, clean design,
+				citing/footnotes, and a brief overview of the dataset used.
+			</p>
+    </section>
+
+    <section>
+		<h2>Final Reflection</h2>
+
+		<p>
+			I found the process to be difficult and enlightening. It was difficult because the most obvious ways to create persuasive visualizations
+			also felt like the most obviously deceptive (e.g. playing with axis limits or scales, extremely slanted titles/annotations/labels), and
+			so I was left struggling to come up with persuasive methods that were less “in your face”. Ultimately, I feel that most of the methods I
+			landed on for persuasion were more centered on the data analysis itself (e.g. percentages vs counts, how to count individual complaints,
+			exploiting correlations in the dataset), which was enlightening as it showed how many layers one can employ to persuade (or deceive) others
+			with data visualization.
+		</p>
+		<p>
+			In terms of what I learned, there was the direct observation that a clean layout can go a long way towards making something look believable
+			and objective, but more interesting was that what “seems reasonable” to one person may come off as deceptive to another. For example, considering
+			all complaints together may seem reasonable to someone who believes that most of the “Unsubstantiated” or “Exonerated” complaints were likely
+			real grievances that couldn't be fully investigated due to lack of cooperation by the NYPD, but this may seem unfair to someone who is generally more supportive of
+			the NYPD. This reminded me of one of our readings that encouraged us to consider the “framing effect”, in which an
+			author's own beliefs and perspective will color their work, including in the realm of data analysis and visualization. Not only does the
+			framing effect make it difficult to draw a line between “acceptable” and “misleading” persuasive choices, but it gets even more difficult
+			when we consider that many choices would be acceptable on their own, but the omission of the fact that the choice was even made
+			turns it into something misleading. The grouping or ungrouping of complaint types is still a good example here.
+		</p>
+		<p>
+			My overall takeaway is simplistic: ethical analysis and visualization is hard. To me, ethical analysis means open source. We all have our own
+			perspective that gives us our different set of “seems reasonable” choices, and the most obvious way to be clear about that is to open source
+			the analysis code. Since it's possible that the code could be extremely dense or convoluted, it would be nice to also share a high-level summary
+			of the choices made by the analyst. Ethical visualization would then be defined as creating a visualization on top of data produced via ethical
+			analysis, and in which the author is transparent about their own stance on an issue. In this assignment, I found that I could give my
+			visualizations seemingly neutral titles to make them seem more objective, which makes me feel like I'd rather have authors be clear about their
+			stance instead of attempting to appear neutral. Unfortunately, the ideal of transparency is in pretty strong opposition with the ideal of brevity,
+			or a “punchy” visualization with a quick takeaway. Visualizations often strive to quickly communicate a large amount of data, which would be made
+			more cumbersome by accompanying the visualization with a paragraph of text about the author's stance on the issue. Similarly, needing to read
+			through someone's code to understand the intricacies of the visualization is also in opposition to the goal of quick and effective communication.
+		</p>
+
+		<p>
+			In summary, this assignment showed me that it's really not a clear distinction between what's misleading and what's a difference of opinion,
+			and hence it behooves us to think critically both about the visualizations we're presented with, but also in how we can attempt to be as
+			truthful in our own communication as possible, even if that truthfulness requires us to sacrifice some of our illusion of neutrality. I also want
+			to say that this was a really interesting process to go through, and I appreciate the thought that went into crafting this assignment!
+		</p>
+    </section>
+	</main>
+</body>
+</html>

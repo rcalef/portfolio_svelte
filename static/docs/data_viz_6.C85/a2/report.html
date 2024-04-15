@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Vis & Society Assignment 2</title>
+	<link rel="stylesheet" href="https://vis-society.github.io/assignments/report.css" />
+</head>
+
+<body>
+	<header>
+		<h1>
+			<small>Assignment 2</small>
+			Exploratory Data Analysis
+		</h1>
+
+		<p>
+			<strong>Robert Calef</strong> — <em>rcalef[at]mit[dot]edu</em>
+		</p>
+	</header>
+	<main>
+		<section>
+			<h2>Subtheme: Condo Conversions</h2>
+			<p>
+				In this report, we will be looking at the phenomenon of condominium (or "condo") conversions: a process
+				which typically consists of converting a building of rental units into a building where individuals instead
+				buy and own the constituent units. While it's outside of the scope of this report to give the full context
+				and background on condo conversions, <a href="https://www.bankrate.com/real-estate/what-is-condominium-conversion/" target="_blank" rel="noreferrer noopener">this article</a>
+				provides a good high-level overview.
+			</p>
+
+			<p>
+				One of the main reasons we're interested in studying condo conversions is listed as a single bullet
+				point in the "Disadvantages" section of the linked article above: "Condo conversions may displace rental tenants".
+				To be clear, the question of what effects condo conversions have on their surrounding neighborhoods isn't new, with
+				research reaching back to at least the
+				<a href="https://scholarship.law.duke.edu/cgi/viewcontent.cgi?article=2738&context=dlj" target="_blank" rel="noreferrer noopener">1980s</a>.
+				While we'll ultimately be interested in understanding how condo conversions affect communities in terms
+				of qualities like affordability and diversity, we'll begin in this report by trying to understand some
+				fundamental facts about condo conversions in the Greater Boston area in order to ground future analyses.
+			</p>
+
+			<h3>Overall Analysis Questions</h3>
+			To guide our initial exploration of the data, we'll focus on questions cented on the what, where, and when
+			of condo conversions. In particular, we want to begin to answer the following questions:
+			<ol>
+				<li>
+					<b>Where are condo conversions happening?</b>
+					<p>While condo conversions are only one aspect of the rental market in a given area,
+					it will be interesting to know if there are certain areas of Boston with an outsize
+					amount of condo conversions, as these may be having a negative effect on the availability
+					of rental units in those neighborhoods.</p>
+				</li>
+				<li>
+					<b>When are the condo conversions happening?</b>
+					<p>Understanding the growth (or lack thereof) of condo conversions will help ground our
+					future thinking. If this is a growing trend, then we should be more proactively
+					thinking about the effects it will have on our communities. If this is a decreasing
+					trend, then there may be more pressing issues where we should instead focus our time
+					and resources.</p>
+				</li>
+				<li>
+					Combining the above two questions, <b>are there certain areas of Boston where the rate of condo
+					conversions is increasing faster than others?</b>
+					<p>If so, then this knowledge can be useful in at least two ways. First, these areas would be feeling
+					the largest impact of condo conversions and may be places where we want to focus our efforts to
+					have the largest impact, and second, due to the rapid increase in condo conversions in these areas,
+					these may be areas where we'd have the most statistical power to observe any downstream effects of
+					condo conversions</p>
+				</li>
+				<li>
+					<b>What types of buildings are being converted into condominiums?</b>
+					<p>This will help give us some sense of what types of buildings are being
+					taken off the rental market. Are these mostly smaller multi-family dwellings
+					or are these large high-density housing spaces? This will information will
+					also help us map from number of buildings taken off the rental market -> number
+					of units, where number of units is more meaningful in terms of number of renters affected.</p>
+				</li>
+			</ol>
+			<p>
+				To try to answer the above questions, we will leverage two datasets on condo conversions:
+				<ul>
+					<li>"Boston dataset": <a href="https://github.com/gracefh/boston-condo-conversions" target="_blank" rel="noreferrer noopener">Condo conversions between 2015-2024 in Boston, MA</a></li>
+					<li>"Cambridge dataset": <a href="https://github.com/gracefh/cambridge_condo_conversions" target="_blank" rel="noreferrer noopener">Condo conversions between 2015-2024 in Cambridge, MA</a></li>
+
+				</ul>
+			</p>
+		</section>
+
+		<section>
+			<h2>Data exploration and cleaning</h2>
+			<h3>Datasets overview</h3>
+			<p>
+				We'll begin by just getting a general sense of what's contained in our datasets. To do this, I'll be loading the datasets into a
+				<a href="https://jupyter.org/">Jupyter notebook</a>, which is an interactive environment for data analysis with Python. While we'll
+				be loading our data into <a href="https://www.tableau.com/">Tableau</a> later to make some nice visualizations, I find it a bit
+				easier to use the Python ecosystem (specifically <a href="https://pandas.pydata.org/">Pandas</a>) for initial data exploration.
+			</p>
+			<p>
+				For the sake of brevity and not boring uninterested readers with Python code, I'll omit the actual code from this report, but the
+				notebook is available <a href="https://github.com/rcalef/portfolio/blob/main/projects/data_viz_6.C85/a2/notebooks/eda.ipynb">here</a> for anyone interested.
+			</p>
+
+			<p>
+				We'll begin by loading each dataset and taking a look at their overall structure. Due to the large number of columns in each dataset,
+				we won't be listing all of them here, but encourage you to refer to the Jupyter notebook if you're interested in a complete listing.
+			</p>
+			<p>
+				For the Boston dataset, we see that the dataset contains <code>2245</code> rows with <code>114</code> columns, or variables. Given
+				the description of the dataset and the presence of columns like <code>ADDRESS</code>, we can assume that each row here corresponds
+				to a single building.
+				Looking further at the columns, we see that there are some columns like <code>ADDRESS</code> and <code>num_condo_units</code>
+				that only appear once, but there are other columns that seem to appear twice, once with the suffix <code>_prior</code> and once
+				with the suffix <code>_post</code>, such as <code>LAND_VALUE_prior</code> and <code>LAND_VALUE_post</code>. The rationale behind
+				the <code>_prior</code> and <code>_post</code> columns is described by the author of the dataset on their GitHub:
+				<blockquote>
+					For each condo conversion, we kept 1 data entry and augmented it with the number of condo units (<code>num_condo_units</code>) and the year
+					just prior to the conversion (<code>prior_year</code>) and the next year, after the conversion occurred (<code>post_year</code>). Data fields
+					with the suffix <code>_prior</code> indicate data from <code>prior_year</code>, and data fields with the suffix <code>_post</code> indicate data
+					from <code>post_year</code>.
+
+				</blockquote>
+			</p>
+			<p>
+				Taking a look at the Cambridge dataset, we have <code>285</code> rows and <code>161</code> columns, and again, it appears that each
+				row corresponds to a single building. We can already notice two things:
+				<ol>
+					<li>The Cambridge dataset is much smaller than the Boston dataset (roughly 1/10th the size)</li>
+					<li>The Cambridge dataset contains a different set of variables than the Boston dataset</li>
+				</ol>
+				The more immediate concern is the second point above, which means we may have to perform some manual transformations or curation
+				to join the two datasets and analyze them together. Looking at the column names in the Cambridge dataset, we do indeed see
+				a different set of columns but also see that the columns also follow the format of using the <code>_prior</code> and <code>_post</code>
+				suffixes.
+			</p>
+			<p>
+				Given the naming of these columns, a good first sanity check is just to verify that all the columns with a <code>_prior</code> suffix
+				have a matching column with the <code>_post</code> suffix. Spoiler alert: they do, in both datasets, but I'll leave the verification
+				in the Jupyter notebook for any interested reader.
+			</p>
+
+
+			<h3>Check zip codes</h3>
+			<p>
+				To start looking at our first question of where condo conversions are happening, we'll need to identify a variable that gives the location
+				of the building. Our ideal location variable is a zip code, as this provides some geographic binning to give aggregate signal beyond looking
+				at individual locations, and also is handled nicely by Tableau when making our exploratory plots. Unfortunately the Cambridge dataset doesn't
+				seem to have quite the granularity of location data we want. It has a street address column (<code>Address</code>) that gives a street and a
+				number (e.g. 1 Blackstone St) and a <code>GISID</code> column that links out to a separate GIS dataset, neither of which can give us a zip code
+				without linking to or querying an external dataset. The Cambridge dataset does however seem to have a zip code for the building owner, which
+				could be interesting for a future analysis of what types of entities are purchasing buildings for condo conversions (e.g. individuals vs real
+				estate investment corporations).
+			</p>
+			<p>
+				Due to the missing zip codes in the Cambridge dataset, and its relatively small size compared to the Boston dataset, <b>we'll use only the Boston
+				dataset for the remainder of this report</b>. For location information, the Boston dataset has both <code>ZIPCODE_prior</code> and
+				<code>ZIPCODE_post</code> columns. We can start with a basic histogram showing the counts of each zip code in our dataset:
+			</p>
+
+			<figure>
+				<img src="images/1_unfilt_zipcode_hist.svg" alt="Histogram of zip codes in Boston dataset (with NULL column)" />
+				<figcaption>
+				Histogram of <code>ZIPCODE_prior</code> in the Boston dataset.
+				</figcaption>
+			</figure>
+			<p>
+				The histogram above shows the number of times each zip code appears in the Boston dataset, across all of the included years. Here we're flipping
+				the axes of a traditional histogram for more readable axis labels, and sorting zip codes in decreasing order of count since the natural
+				numeric ordering of zip codes isn't obviously meaningful (unless you're a zip code guru). Already a few things jump out at us: very large
+				differences across zip codes (~210 in 02127 vs 1 in each of 02111, 02199, 02467) and the perhaps surprising presence of a "Null" column in the
+				far left with zero counts.
+			</p>
+
+			<p>
+				Looking deeper into these "Null" counts (shown in the "Fix zip codes" section of the Jupyter notebook), we find that there are actually a few
+				issues occuring:
+				<ol>
+					<li>Zip codes ending with the "_" character, e.g. "02128_"</li>
+					<li>Zip codes ending with ".0", e.g. 2128.0</li>
+					<li>Zip codes missing their initial zero, e.g. 2128 instead of 02128</li>
+				</ol>
+				Examples of these are shown below:
+			</p>
+				<figure>
+					<img src="images/2_bad_zipcode_screenshot.png" alt="Screenshot of examples of misformatted zip codes" />
+					<figcaption>
+					Examples of misformatted zip codes in the raw dataset.
+					</figcaption>
+				</figure>
+			<p>
+				While all three of these problems seem like they could be issues, it turns out only issue (1) was leading to "Null" zip codes in Tableau. Surprisingly,
+				Tableau actually gracefully handled issues (2) and (3) and still transformed our zip codes to the expected format. Perhaps issues (2) and (3) are common
+				due to zip codes being read in as numeric types, stripped of leading zeros, and then written out as floating point numbers. We can now fix these issues
+				and revisit the histogram of zip codes.
+			</p>
+			<figure>
+				<img src="images/3_filt_zipcode_hist.svg" alt="Histogram of zip codes in Boston dataset (no NULL column)" />
+				<figcaption>
+				Histogram of zip codes in the Boston dataset after fixing issues leading to "Null" values.
+				</figcaption>
+			</figure>
+			<p>
+				In the above figure, we can now see that the "Null" column is gone, and we've increased the sample size of some of the real zip codes (e.g. we now have
+				~280 datapoints for zip code 02127 as opposed to ~210 previously). After fixing the misformatting issue, the data also passes the sanity check that
+				<code>ZIPCODE_prior == ZIPCODE_post</code> for all rows, which makes sense since we don't expect a building to move after being converted to a condo.
+			</p>
+
+			<h3>Check conversion year</h3>
+			<p>
+				Recall that we're interested in looking at condo conversion trends across both space and time, so now that we're confident in our location data, let's
+				take a look at the time aspect. We'll take a look at <code>prior_year</code> and <code>post_year</code>, which should encode the years immediately before
+				and after the condo conversion took place.
+			</p>
+			<figure>
+				<img src="images/4_year_comparison.svg" alt="Table of condo conversions by year before and after" />
+				<figcaption>
+				Table of number of condo conversions by <code>prior_year</code> and <code>post_year</code>. Note that empty cells indicate that no data points have
+				that combination of <code>prior_year</code> and <code>post_year</code>
+				</figcaption>
+			</figure>
+			<p>
+				In the table above, each cell shows the number of rows of our dataset with the given combination of <code>prior_year</code> and <code>post_year</code>,
+				and it looks perfect! No years super far in the past or future, no nulls, and all of the <code>post_year</code> values are exactly one year after the
+				<code>prior_year</code> values.
+			</p>
+
+			<h3>Check building types</h3>
+			<p>
+				Before looking at overall trends, we should also look at the actual buildings that are being referred to in each row. Referring back to the data dictionary
+				on the GitHub page for the dataset, we see that <code>LU_DESC</code> is a human-readable description of the type of property, which sounds like a good sanity
+				check.
+			</p>
+
+			<figure>
+				<img src="images/5_land_use_desc_raw.svg" alt="Histogram of human-readable land use descriptions in year prior to conversion" />
+				<figcaption>
+				Histogram of land use descriptions per property in the year prior to condo conversion (<code>LU_DESC_prior</code>).
+				</figcaption>
+			</figure>
+			<p>
+				The figure above again shows a histogram, this time of the land use descriptions in the year prior to the condo conversion. Wow! We can see that our dataset
+				contains many land uses that are unrelated to residential properties, such as "OTHER EXEMPT BUILDING", "SUPERMARKET", etc. Note that all the way at the bottom,
+				we also see some "Null" datapoints. While it'd be a headache to try to filter these individually, our data dictionary also hints at a more standardized land
+				use <b>code</b> in the <code>LU</code> columns.
+			</p>
+
+			<figure>
+				<img src="images/6_land_use_codes.svg" alt="Histogram of land use codes in year prior to conversion" />
+				<figcaption>
+				Histogram of land use codes per property in the year prior to condo conversion (<code>LU_prior</code>).
+				</figcaption>
+			</figure>
+			<p>
+				In the histogram above, we see the counts of land use codes in our dataset. We can see that the data looks much cleaner: we have far fewer categories, and no
+				longer see any "Null" datapoints. However, while we've gained in terms of cleanliness, we've now obscured the meaning of the data behind these arbitrary land
+				use codes. Luckily, we can find the mapping of codes to descriptions online (on the first page of
+				<a href="https://data.boston.gov/dataset/property-assessment/resource/fda18178-b7f8-49fc-be3e-75ddc0be4117">this</a> PDF).
+			</p>
+
+			<figure>
+				<img src="images/7_land_use_codes_map.svg" alt="Mapping of land use codes to human-readable descriptions and condensed categories" />
+				<figcaption>
+				Mapping of land use (LU) codes to human-readable descriptions and condensed categories.
+				</figcaption>
+			</figure>
+			<p>
+				In the table above, the first column contains the familiar land use codes from the previous histogram and the second column contains their corresponding
+				human-readable description copied from the PDF linked above. The third column shows a mapping from land use codes to a condensed set of categories that I've
+				assigned to attempt to group semantically similar categories. In particular, I've made the following choices:
+			</p>
+			<ul>
+				<li>Grouping the two tax-exempt categories</li>
+				<li><code>Commercial</code>, <code>Commercial condominium</code>, and <code>Commercial land</code> grouped to a single "Commercial" category</li>
+				<li><code>Residential condominium unit</code>, <code>Condominium main</code>, and <code>Condo parking</code> grouped to a single "Condominium" category</li>
+				<li>All codes referring to residential properties with varying numbers of units combined to a single "Residential" category</li>
+			</ul>
+			<p>
+				While the first two points above are largely for simplifying our exploratory data analysis, the last two (Condominium and Residential) will have an impact
+				on our downstream analyses. Because of this impact, we should enumerate and justify a few of the assumptions encoded in the choices above:
+			</p>
+			<ul>
+				<li>Including <code>CM (Condominium main)</code> in our "Condominium" category</li>
+					<ul><li>
+						The full description of <code>Condominium main</code> is "physical structure housing all related condo units with no assessed value", meaning that this
+						category could include both residential and commercial condominiums. By potentially including some commercial condominiums, we may be slightly
+						overestimating the number of residential rental units converted to residential condominiums (i.e. in the case of residential rental to commercial condominum)
+						but these are still residential units that have been taken off the rental market.
+					</li></ul>
+				<li>Including <code>CP (Condo parking)</code> in our "Condominium" category</li>
+					<ul><li>
+						Similar to above, there's no distinction here between residential and commercial condos, but from the perspective of looking at shrinking rental markets,
+						we're still interested in residential units being converted into condo parking.
+					</li></ul>
+				<li>Including <code>RC (Mixed use res. and comm.)</code> and <code>RL (Residential land)</code> in our "Residential" category</li>
+				<ul><li>
+					Again, since we're largely interested in the question of whether developers are favoring residential condominiums at the detriment of the residential rental market,
+					it makes sense to also include cases where either mixed-use land or undeveloped residential land are turned into residential condominiums.
+				</li></ul>
+
+			</ul>
+			<p>
+				Now that we have a condensed set of categories, we can take a look at the land use conversions in our dataset.
+			</p>
+			<figure>
+				<img src="images/8_land_use_prior_post.svg" alt="Table of land use conversions" />
+				<figcaption>
+				Table of land use conversion events in our dataset. Horizontal axis indicates the use prior to conversion and the vertical axis indicates use post conversion.
+				Values within cells and color indicates number of conversion events in that bin.
+				</figcaption>
+			</figure>
+			<p>
+				In the above table, we see the full set of land use conversion events in our dataset. We can immediately see that the largest bucket is the conversions we're
+				actually interested in: Residential -> Condominium. However, we do also have many other extraneous conversion events that we're not interested in for our current
+				analysis goals. It's also interesting to see many events of conversions within the Residential category, which could be additions or removal of units in
+				existing homes, which would also be an interesting resource if we wanted to look at housing market growth in future work.
+
+				We also see a lot of conversions within the Condominium category, and while I won't show data for it here, these mostly seem to be conversions from
+				<code>CM (Condominium main)</code> to <code>CD (Residential condo)</code>, which seem more likely to be bookkeeping updates than anything particularly insightful.
+			</p>
+
+			<p>
+				Now that we've completed our sanity checks, we can settle on our final dataset: <b>1,179 records of residential -> condominium conversions in Boston from 2015-2024</b>.
+			</p>
+
+			<h2>Discoveries & Insights</h2>
+			<p>
+				To look at our first question, let's check where the condo conversions seem to be happening. We could look at a histogram by zip code like Figures 1 and 3, but unless
+				you're extremely familiar with Boston (which I'm not), it's probably hard to identify the zip codes with locations across the city. Instead we can visualize the number
+				of condo conversions per zip code on a map.
+			</p>
+
+			<figure>
+				<img src="images/9_counts_zipcode_map.svg" alt="Map of Boston with zip codes colored by number of condo conversions" />
+				<figcaption>
+				Map of the Boston area. Each zip code is colored and annotated by the number of residential to condo conversion events occuring within that zip code for the years 2015-2024.
+				</figcaption>
+			</figure>
+			<p>
+				The map above shows how many residential to condo conversions have happened in each zip code from 2015-2024. While the zip codes themselves cover varying amounts of land, we
+				can still see that certain areas jump out as having a very high amount of conversion events, in particular the east (02127/Dorchester Heights and
+				02128/East Boston) and west (02130/Jamaica Plain, 02131/Roslindale) sides of the city. In contrast, other parts of the city seem to have a particularly low rate of conversions,
+				such as the north west (02135/Brighton) and the south (02126/Mattapan). Unfortunately, this map is a bit crowded, especially in the central part of the city where the zip codes
+				cover a relatively small amount of area (e.g. 02113 and 02114). I made the decision to overlay on top of a more detailed map of the city to provide additional context, but we
+				can see that this can also make the map a bit hard to read.
+			</p>
+			<p>
+				To create a less cluttered visualization, we can also try to group zip codes into a more intuitive binning: neighborhoods. In fact, referring to zip codes by neighborhood is
+				exactly what we were doing above. Using the data from the City of Boston <a href="https://owd.boston.gov/wp-content/uploads/2015/07/Neighborhood-Boundaries-and-Zip-Codes.pdf">here</a>,
+				we can assign zip codes to neighborhoods, and look at the rate of conversions at that granularity
+			</p>
+
+			<figure>
+				<img src="images/10_counts_by_neighborhood.svg" alt="Histogram of residential to condo conversions by neighborhood" />
+				<figcaption>
+				Histogram of number of residential to condo conversions per neighborhood for the years 2015-2024.
+				</figcaption>
+			</figure>
+			<p>
+				From the histogram above, we can see that our observations from the map largely hold once grouped by neighborhood, but also can more easily glean information like the fact that
+				Central Boston doesn't seem to have many conversions, whereas the previous plot required us to manually add up numbers to come to the same conclusion. If you're like me,
+				then these neighborhood names may not be that useful in isolation as well. So below I've provided the same map as before, but now just colored by each zip code's neighborhood
+				assignment.
+			</p>
+
+			<figure>
+				<img src="images/11_neighborhood_map.svg" alt="Zip codes of Boston colored by neighborhood assignment." />
+				<figcaption>
+				Neighborhood assignments of each zip code in Boston.
+				</figcaption>
+			</figure>
+			<p>
+				There are a couple surprises here, such as the zip code 02127 is considered part of South Boston, whereas I'd thought it was part of "Dorchester" based on its overlay on top of
+				"Dorchester Heights". This view also makes it clear that Chinatown is grouped with Central Boston, and that the little colored island off to the east is grouped with Dorchester.
+				Note also that the colors here are the same as the ones used in the histogram in Figure 10, which hopefully allows for easier comparison.
+			</p>
+			<p>
+				Now that we have some sense of where condo conversions are occurring, let's take a look at our second question: when are they occuring?
+			</p>
+			<figure>
+				<img src="images/12_counts_by_year.svg" alt="Condo conversion events by year." />
+				<figcaption>
+				Number of residential to condo conversion events per year. Note that this shows the year after conversion, thus beginning at 2016.
+				</figcaption>
+			</figure>
+			<p>
+				In the plot above, we can observe the trend of number of condo conversion events as a function of time. In particular, we're looking at the year after the conversion event, as
+				this should give a better sense of when conversions completed, although looking at the year before would generate the same shape offset by 1 year.
+			</p>
+			<p>
+				While it appears that there was a trend of increasing number of condo conversions from 2016-2019, we observe a sharp drop in conversions during 2020-2021, which is likely
+				attributable to the COVID-19 pandemic shutting down many ongoing construction and renovation projects. We then see an uptick in 2022, presumably as COVID-era restrictions were
+				lifted, supply chains began moving again, and individuals began to go back to work. The drop going into 2023 may be attributable to another aspect of the COVID-19 pandemic: a
+				period of low interest rates for loans followed by increasingly high interest rates. It's possible that the uptick going into 2022 may be both the completion of delayed conversions
+				as well as a spate of new conversions driven by "cheap money" in the form of low interest rate loans. While we won't show the data here, one can observe from
+				<a href="https://fred.stlouisfed.org/series/FEDFUNDS">this interactive chart</a> that interest rates were very low (~0%) going into 2022, and reached ~5% by the beginning of 2023.
+			</p>
+			<p>
+				Given that we were seeing a trend of increasing condo conversions before the COVID-19 pandemic, and then saw a rebound in the years following, it seems safe to assume that this
+				isn't a declining trend and thus we should contiune to think critically about the effects of condo conversions on our communities.
+			</p>
+			<p>
+				One of our other questions was whether there were certain areas where the condo conversion trend seemed to be accelerating faster than others. To try to answer that question,
+				we can split out the previous plot by neighborhood to visualize the number of condo conversions per year, per neighborhood.
+			</p>
+			<figure>
+				<img src="images/13_counts_by_year_by_hood.svg" alt="Condo conversion events by year, faceted by neighborhood." />
+				<figcaption>
+				Number of residential to condo conversion events per year, faceted by neighborhood. Note that this shows the year after conversion, thus beginning at 2016. Note that
+				different facets have different scales on their vertical axes.
+				</figcaption>
+			</figure>
+			<p>
+				While this is a bit of a busy plot, we can still try to glean some insights here. In particular, we can notice that most of the neighborhoods have a trend that's similar to the
+				overall trend that we observed in the aggregate data in Figure 12. We do see a couple notable exceptions though. In particular, Allston/Brighton jumps out for having relatively
+				few conversions prior to 2020 and the COVID-19 pandemic, but seems to have really kicked off in recent years. Additionally, Roxbury and South Boston also show sustained development
+				through the 2023 dip observed in other neighborhoods. With this knowledge, we may want to pay special consideration to these areas when we start diving into any negative effects
+				associated with residential to condominum conversions.
+			</p>
+
+			<p>
+				Lastly, we're also interested in looking not just at the number of buildings that have been converted, but also the number of actual units that
+				have undergone conversion, as this may give us a better sense of the actual number of individuals affected in these neighborhoods. For example,
+				a handful of 3 unit rental townhomes converting to condominiums would displace fewer renters than the conversion of a single large apartment
+				building housing a hundred units.
+			</p>
+			<figure>
+				<img src="images/14_units_by_neighborhood.svg" alt="Condo conversion events by year, faceted by neighborhood." />
+				<figcaption>
+					Histogram of number of residential to condo conversions per neighborhood for the years 2015-2024. Left facet shows number of buildings converted, right facet shows number of
+					residential units converted.
+				</figcaption>
+			</figure>
+			<p>
+				In the plot above, we see our original histogram of condo conversions per neighborhood (Figure 10) on the left side, and on the right side, we see the number of converted <b>units</b>
+				per neighborhood. By using the sorting from the left panel across both plots, we can see how the relative ranking of the neighborhoods shifts once we incorporate the additional information
+				of number of units per building. In particular, we now see that South Boston jumps out as the neighborhood with the most condo conversions by far, likely driven by the conversion
+				of large apartment buildings with many residential units. Overall, what we can see here is that by taking into account the number of residential units per building converted to condominiums,
+				we can see a clearer picture of which communities might be most affected.
+			</p>
+			<p>
+				For the curious,
+				<a href="https://www.google.com/maps/@42.3545797,-71.0459179,3a,75y,67.02h,119.82t/data=!3m6!1e1!3m4!1s3yYiM0vq-7ZkLmasmst-Qw!2e0!7i16384!8i8192?entry=ttu">here's</a>
+				the street view for 22 Liberty Drive, a building in South Boston with 110 units converted to condominiums in 2017.
+			</p>
+		</section>
+
+
+		<section>
+			<h2>Summary</h2>
+			<p>
+				By conducting this exploratory data analysis, we've managed to both identify and fix issues in our dataset (zip codes) and also filter our dataset down to the most relevant data points
+				(residential -> condominium conversions). While this is a rich dataset with many more avenues of investigation, we can at least have some confidence in our initial findings related
+				to our starting questions. In particular, we found that:
+				<ul>
+					<li>
+						Dorchester, East Boston, and South Boston are neighborhoods that have had many conversions of residential units to condos in the past nine years, and thus would be good
+						candidates for further study if we wish to investigate downstream effects of condo conversions.
+					</li>
+					<li>
+						While the COVID-19 pandemic created a lull in condo conversions, the rate of condo conversions has picked back up to pre-COVID levels over the past 2 years.
+					</li>
+					<li>
+						Allston/Brighton, Roxbury, and South Boston seem to show a particularly strong growth in the rate of condo conversions post-COVID and thus may be areas where we would
+						want to focus efforts such as community outreach to inform rental tenant's of their rights.
+					</li>
+				</ul>
+				I think the last bullet point is particularly relevant in light of <a href=https://www.mbmllc.com/boston-condominium-conversion-ordinance-updates.html>updates</a> made to the Boston
+				Condominium and Cooperative Conversion Ordinance in 2021, which expand the protections afforded to tenants of buildings with proposed condominium conversions.
+			</p>
+			<p>
+				Overall, I think we've managed to establish that conversion of residential units to condominiums is a growing trend in the Boston area, and thus begets careful analysis and consideration
+				for how it affects our communities across many axes such as diversity and cost of living. I hope to continue to use this dataset and others to dive into these questions in future work.
+			</p>
+		</section>
+	</main>
+</body>
+</html>

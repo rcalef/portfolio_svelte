@@ -1,0 +1,65 @@
+[
+    {
+        "title": "6.C85 Assignment 2",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "./docs/data_viz_6.C85/a2/report.html",
+        "description": "Data Viz class assignment 2.",
+        "year": "2024"
+    },
+    {
+        "title": "6.C85 Assignment 3",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "./docs/data_viz_6.C85/a3/A3_report.html",
+        "description": "Data Viz class assignment 3.",
+        "year": "2024"
+    },
+    {
+        "title": "6.C85 Assignment 4",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "./docs/data_viz_6.C85/a4/A4_report.html",
+        "description": "Data Viz class assignment 4.",
+        "year": "2024"
+    },
+    {
+        "title": "Closest Pair Algorithm Visualization",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/comp_geom",
+        "description": "Implementation of closest pair in 2D via recursive splitting.",
+        "year": "2024"
+    },
+    {
+        "title": "Probabilistically-sound beam search with masked language models",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/hcb_infilling",
+        "description": "Using masked language models for infilling with better approximations of joint distributions.",
+        "year": "2024"
+    },
+    {
+        "title": "Revisiting assumptions in scRNA-seq foundation model encodings",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/deep_learning_project/blob/main/_posts/2023-11-08-scRNAseq-assumptions.md",
+        "description": "Diving into the rank-value encoding scheme used in training scRNA-seq foundation models.",
+        "year": "2023"
+    },
+    {
+        "title": "Reinforcement Learning: An Introduction (Sutton & Barto) solutions",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/suttonBarto2ndEd",
+        "description": "Working through the exercises in a canonical reinforcement learning textbook.",
+        "year": "2022"
+    },
+    {
+        "title": "Bioinformatics Toolkit",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/binf-utils",
+        "description": "Collection of Python tools for common bioinformatics operations like FASTA/FASTQ parsing, global and local alignment, and k-mer generation.",
+        "year": "2017"
+    },
+    {
+        "title": "mtAnnotate",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "path": "https://github.com/rcalef/mtAnnotate",
+        "description": "Utility for transferring genome annotations between mitochondiral genomes.",
+        "year": "2014"
+    }
+]
