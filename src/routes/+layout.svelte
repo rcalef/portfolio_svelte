@@ -1,10 +1,10 @@
 <script>
     import { page } from '$app/stores';
     let pages = [
-        {url: "/", title: "Home"},
-        {url: "/projects", title: "Projects"},
-        {url: "/contact", title: "Contact"},
-        {url: "/meta", title: "Metadata"},
+        {url: "./", title: "Home"},
+        {url: "./projects", title: "Projects"},
+        {url: "./contact", title: "Contact"},
+        {url: "./meta", title: "Metadata"},
     ];
     let colorScheme = "light dark";
     let root = globalThis?.document?.documentElement;
@@ -16,7 +16,10 @@
 
     $: root?.style.setProperty("color-scheme", colorScheme);
     $: localStorage.colorScheme = colorScheme;
+
+    console.log($page)
 </script>
+
 <style>
     .color-scheme {
         position: absolute;
@@ -69,7 +72,7 @@
 
 <nav>
     {#each pages as p}
-        <a href={p.url} class={$page.route.id === p.url ? "current" : "" } target={ p.url.startsWith("http") ? "_blank" : null }>{p.title}</a>
+        <a href={p.url} class={"." + $page.route.id === p.url ? "current" : "" } target={ p.url.startsWith("http") ? "_blank" : null }>{p.title}</a>
     {/each}
 </nav>
 <slot />
